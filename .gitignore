@@ -1,0 +1,31 @@
+# Ignorar archivos y directorios generados automáticamente
+.vscode/
+/.vscode/
+*.log
+
+# Ignorar archivos de configuración locales
+/.vscode/settings.json
+/.vscode/tasks.json
+/.vscode/launch.json
+
+# Ignorar directorio de dependencias de PHP
+/vendor/
+
+# Ignorar archivos generados por PHP
+*.php.cache
+*.php_cs.cache
+
+# Ignorar archivos de sesión de PHP
+session.save_path
+
+# Ignorar el directorio de caché de Composer
+/vendor/composer/cache
+
+# Ignorar el archivo de bloqueo de Composer
+composer.lock
+
+# Ignorar archivos de respaldo y temporales
+*~
+*.swp
+.DS_Store
+Thumbs.db
