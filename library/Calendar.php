@@ -1,4 +1,6 @@
 <?php
+// PHP Calendar obtenido de:
+// https://codeshack.io/event-calendar-php/
 class Calendar {
 
     private $active_year, $active_month, $active_day;

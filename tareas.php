@@ -1,3 +1,6 @@
+<?php
+include_once("library/conexion.php");
+?>
 <!doctype html>
 <html lang="es">
 
@@ -10,6 +13,8 @@
 	<!-- Bootstrap CSS v5.2.1 -->
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
 	<link rel="shortcut icon" href="img/programar-16px.ico" type="image/x-icon">
+	<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+	<script src="js/taskio.js"></script>
 </head>
 
 <body style="background-image: url(img/bg.jpg);">
@@ -52,11 +57,11 @@
 						</div>
 
 						<div class="mb-3">
-							<label for="responsable" class="form-label">Elige la prioridad</label>
-							<select class="form-select form-select-sm" name="responsable" id="responsable">
-								<option selected>Alta</option>
-								<option value="1">Media</option>
-								<option value="2">Baja</option>
+							<label for="prioridad" class="form-label">Elige la prioridad</label>
+							<select class="form-select form-select-sm" name="prioridad" id="prioridad">
+								<option value="ALTA" selected>Alta</option>
+								<option value="MEDIA">Media</option>
+								<option value="BAJA">Baja</option>
 							</select>
 						</div>
 						<div class="mb-3">
@@ -66,14 +71,21 @@
 						<div class="mb-3">
 							<label for="responsable" class="form-label">Selecciona al responsable</label>
 							<select class="form-select form-select-sm" name="responsable" id="responsable">
-								<option selected>Jhon Doe</option>
-								<option value="1">Marco Antonio</option>
-								<option value="2">Otro 2</option>
-								<option value="3">Otro 3</option>
+								<option value="">John Doe (Selecciona un usuario real)</option>
+								<?php
+								$sql = "SELECT * FROM usuarios";
+								$taskio = $pdo->prepare($sql);
+								$taskio->execute();
+								while ($usuario = $taskio->fetch()) {
+								?>
+								<option value="<?= $usuario['id'] ?>"><?= $usuario['nombre'] ?></option>
+								<?php
+								}
+								?>
 							</select>
 						</div>
 						<div class="text-center">
-							<button type="button" class="btn btn-primary">Agregar tarea</button>
+							<button type="button" class="btn btn-primary" onclick="AgregarTarea()">Agregar tarea</button>
 						</div>
 					</form>
 				</div>
@@ -88,13 +100,43 @@
 									<th scope="col">Responsable</th>
 								</tr>
 							</thead>
-							<tbody>
-								<tr class="">
-									<td scope="row"></td>
-									<td></td>
-									<td></td>
-									<td></td>
+							<tbody id="tbody_tareas">
+								<tr>
+									<td scope="row">Ejemplo 1</td>
+									<td>✅ Baja ❕ Media ❗ Alta</td>
+									<td>2023-04-2023</td>
+									<td>Jhon Doe</td>
 								</tr>
+								<?php
+								$sql = "SELECT * FROM tareas LIMIT 150";
+								$taskio = $pdo->prepare($sql);
+								$taskio->execute();
+								while ($fila = $taskio->fetch()) {
+									$id_responsable = $fila["id_responsable"];
+									$sql = "SELECT * FROM usuarios WHERE id = {$id_responsable}";
+									$taskio_responsable = $pdo->prepare($sql);
+									$taskio_responsable->execute();
+									$responsable = $taskio_responsable->fetch();
+								?>
+									<tr>
+										<td scope="row"><?= $fila['nombre'] ?></td>
+										<td class="text-center">
+											<?php
+											if ($fila["prioridad"] == "ALTA") {
+												echo "&#10071;";
+											} else if ($fila["prioridad"] == "MEDIA") {
+												echo "&#10069;";
+											} else {
+												echo "&#9989;";
+											}
+											?>
+										</td>
+										<td><?= $fila['fecha_entrega'] ?></td>
+										<td><?= $responsable["nombre"] ?></td>
+									</tr>
+								<?php
+								}
+								?>
 							</tbody>
 						</table>
 					</div>

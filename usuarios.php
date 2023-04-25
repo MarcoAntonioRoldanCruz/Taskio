@@ -1,3 +1,6 @@
+<?php
+include_once("library/conexion.php");
+?>
 <!doctype html>
 <html lang="es">
 
@@ -10,6 +13,7 @@
 	<!-- Bootstrap CSS v5.2.1 -->
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
 	<link rel="shortcut icon" href="img/programar-16px.ico" type="image/x-icon">
+	<script src="js/taskio.js"></script>
 </head>
 
 <body style="background-image: url(img/bg.jpg);">
@@ -71,11 +75,24 @@
 									<th scope="col">E-mail</th>
 								</tr>
 							</thead>
-							<tbody>
-								<tr class="">
+							<tbody id="tbody_usuarios">
+								<tr>
 									<td scope="row">Jhon Doe</td>
 									<td>email@domain.ext</td>
 								</tr>
+								<?php
+								$sql = "SELECT * FROM usuarios LIMIT 150";
+								$taskio = $pdo->prepare($sql);
+								$taskio->execute();
+								while ($fila = $taskio->fetch()) {
+								?>
+									<tr>
+										<td scope="row"><?= $fila["nombre"] ?></td>
+										<td><?= $fila["correo_electronico"] ?></td>
+									</tr>
+								<?php
+								}
+								?>
 							</tbody>
 						</table>
 					</div>

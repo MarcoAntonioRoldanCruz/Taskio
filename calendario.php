@@ -2,6 +2,10 @@
 include 'library/Calendar.php';
 $calendar = new Calendar();
 $calendar->add_event('Tarea de John Doe', '2023-04-26', 1, 'green');
+$calendar->add_event("Taller de programación WEB CC2", "2023-04-25", 1, "red");
+
+include_once("library/conexion.php");
+
 ?>
 <!doctype html>
 <html lang="es">

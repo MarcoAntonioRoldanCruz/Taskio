@@ -1,3 +1,6 @@
+<?php
+require_once("library/conexion.php");
+?>
 <!doctype html>
 <html lang="es">
 
@@ -50,13 +53,43 @@
 									<th scope="col">Responsable</th>
 								</tr>
 							</thead>
-							<tbody>
+							<tbody id="tbbody_seguimiento">
 								<tr class="">
 									<td scope="row">Tarea 1</td>
 									<td>2023-04-26</td>
-									<td>🟢🟡🔴</td>
+									<td>&#9989;&#10069;&#10071;</td>
 									<td>John Doe</td>
 								</tr>
+								<?php
+								$sql = "SELECT * FROM tareas LIMIT 150";
+								$taskio = $pdo->prepare($sql);
+								$taskio->execute();
+								while ($fila = $taskio->fetch()) {
+									$id_responsable = $fila["id_responsable"];
+									$sql = "SELECT * FROM usuarios WHERE id = {$id_responsable}";
+									$taskio_responsable = $pdo->prepare($sql);
+									$taskio_responsable->execute();
+									$responsable = $taskio_responsable->fetch();
+								?>
+									<tr>
+										<td scope="row"><?= $fila['nombre'] ?></td>
+										<td><?= $fila['fecha_entrega'] ?></td>
+										<td class="text-center">
+											<?php
+											if ($fila["prioridad"] == "ALTA") {
+												echo "&#10071;";
+											} else if ($fila["prioridad"] == "MEDIA") {
+												echo "&#10069;";
+											} else {
+												echo "&#9989;";
+											}
+											?>
+										</td>
+										<td><?= $responsable["nombre"] ?></td>
+									</tr>
+								<?php
+								}
+								?>
 							</tbody>
 						</table>
 					</div>
